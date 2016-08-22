@@ -176,6 +176,16 @@ public final class ObjectExtensions {
      * <pre><code>
      *     {@literal @}NonNull String s = getFoo().map(String::valueOf).orElse(DEFAULT_FOO_STRING);
      * </code></pre>
+     * <br>
+     * Note that since this method will return null if the {@code object} parameter is null, you'll need
+     * to be careful with using this with primitives.
+     * <pre><code>
+     *     // BAD! Null pointer if fooString is null
+     *     int i = fooString.map(String::length);
+     *
+     *     // Better - no null pointer
+     *     int i = fooString.orElse(...).map(String::length);
+     * </code></pre>
      *
      * @param object          the object to map
      * @param mappingFunction the function to use to map the given object
