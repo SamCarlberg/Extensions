@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -73,6 +74,41 @@ public final class ObjectExtensions {
     }
 
     /**
+     * Runs the given function if the object is not present
+     *
+     * @param object       the object to test
+     * @param ifNotPresent the function to run if the object is not present
+     * @param <T>          the type of the object
+     */
+    public static <T> void ifNotPresent(T object,
+                                        @NonNull Runnable ifNotPresent) {
+        if (object == null) {
+            ifNotPresent.run();
+        }
+    }
+
+    /**
+     * Filters an object based on a predicate function.
+     *
+     * @param object          the object to test
+     * @param testingFunction the function to use to test the object
+     * @param <T>             the type of the object
+     * @return {@code null} if {@code object} is not present, {@code object} if it passes the testing function,
+     * or {@code null} if it is present but does not pass the testing function
+     * @see Optional#filter(Predicate)
+     */
+    public static <T> T filter(T object,
+                               @NonNull Predicate<? super T> testingFunction) {
+        if (object == null) {
+            return null;
+        } else if (testingFunction.test(object)) {
+            return object;
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Returns the given object, or {@code defaultValue} if it is not present.
      *
      * @param object       the object to test
@@ -130,7 +166,6 @@ public final class ObjectExtensions {
 
     /**
      * Maps the given object to a new value.
-     * <p>
      * <br>
      * For example:
      * <pre><code>
